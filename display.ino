@@ -1,18 +1,4 @@
-/* LED array test code
- *
- * Reads (x,y) co-ordinates from the Serial Monitor and toggles the state of
- * the LED at that co-ordinate. The co-ordinates are specified as "x y", e.g.
- * "1 2", followed by a newline. Invalid co-ordinates are rejected.
- *
- * You need to fill in all the places marked TODO.
- *
- * == Setting up the Serial Monitor ==
- * The Serial Monitor must be configured (bottom-right corner of the screen) as:
- *   - Newline (for the line ending)
- *   - Baud rate 115200
- *
- * ENGR 40M
- * July 2018
+/* LED array display code
  */
 
 // Arrays of pin numbers. Fill these in with the pins to which you connected
