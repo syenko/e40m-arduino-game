@@ -33,6 +33,7 @@ Board::~Board() {
 }
 
 void Board::updateBoardState() {
+  this->character->get_input();
   // apply gravity
   if (this->character->get_jumped()) {
     this->character->set_y_vel(this->character->get_delta_y() - GRAVITY * TIME_CONST);
