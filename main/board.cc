@@ -77,12 +77,13 @@ void Board::updateDisplay() {
     this->display[row] = new char[BOARD_SIZE];
 
     for (int col = 0; col < BOARD_SIZE; col++) {
-      this->display[row][col] = this->get(row + x - (int)(BOARD_SIZE / 2), col + y - (int)(BOARD_SIZE / 2));
+      this->display[row][col] = this->get(row + x - (int)((BOARD_SIZE - 1) / 2), col + y - (int)((BOARD_SIZE - 1) / 2));
     }
   }
 
-  int start_x = BOARD_SIZE / 2;
-  int start_y = BOARD_SIZE / 2;
+  // draw character
+  int start_x = (BOARD_SIZE - 1) / 2;
+  int start_y = (BOARD_SIZE - 1) / 2;
   this->display[start_x][start_y] = 15;
   this->display[start_x + 1][start_y] = 15;
   this->display[start_x][start_y + 1] = 15;
