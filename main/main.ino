@@ -1,3 +1,5 @@
+#include "board.hh"
+
 /* LED array display code
  */
 
@@ -7,6 +9,8 @@ const byte ANODE_PINS[8] = {13, 12, 11, 10, 9, 8, 7, 6 };
 const byte CATHODE_PINS[8] = { A3, A2, A1, A0, 5, 4, 3, 2 };
 
 #define NUM_PINS 8
+
+Board board = Board();
 
 void setup() {
   for (byte i = 0; i < NUM_PINS; i++) {
@@ -34,11 +38,11 @@ void setup() {
  * one row at a time. When this function returns, all the LEDs will be off
  * again, so it needs to be called continuously for LEDs to be on.
  */
-void display(byte pattern[8][8], byte cycle) {
+void display(char** pattern, byte cycle) {
   for (byte row = 0; row < NUM_PINS; row++) {
+    char* row_arr = pattern[row];
     for (byte col = 0; col < NUM_PINS; col++) {
-      // turn on
-      if (pattern[row][col] > cycle) {
+      if (row_arr[col] > cycle) {
         digitalWrite(CATHODE_PINS[col], LOW);
       }
       // turn off
@@ -60,37 +64,7 @@ void loop() {
   static byte ledOn[8][8];
   static byte cycle = 0;
 
-  byte x = 0;
-  byte y = 0;
-  byte b = 0;
-  static char message[60];
-
-  if (Serial.available()) {
-    // Parse the values from the serial string
-    x = Serial.parseInt();
-    y = Serial.parseInt();
-    b = Serial.parseInt();
-
-    // Check for input validity
-    if (Serial.read() != '\n') {
-      Serial.println("invalid input - check that line ending is set to \"Newline\"; input must be two numbers");
-      return;
-    }
-    if (x < 0 || x > 7 || y < 0 || y > 7 || b > 15) {
-      sprintf(message, "x = %d, y = %d, b = %d -- indices out of bounds", x, y, b);
-      Serial.println(message);
-      return;
-    }
-
-    // Print to Serial Monitor to give feedback about input
-    sprintf(message, "x = %d, y = %d, b = %d", x, y, b);
-    Serial.println(message);
-
-    // Set LED Brightness
-    ledOn[x][y] = b;
-  }
-
   // This function gets called every loop
-  display(ledOn, cycle);
+  display(board.getDisplay(), cycle);
   cycle = (cycle + 1) % 16;
 }
