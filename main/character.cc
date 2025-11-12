@@ -42,8 +42,8 @@ float Character::get_delta_y() const {
 }
 
 void Character::get_input() {
-  float x_fraction = float(analogRead(JOYSTICK_X_PIN)) / ANALOG_READ_MAX;
-  float y_fraction = float(analogRead(JOYSTICK_Y_PIN)) / ANALOG_READ_MAX;
+  float x_fraction = 1 - float(analogRead(JOYSTICK_X_PIN)) / ANALOG_READ_MAX;
+  float y_fraction = 1 - float(analogRead(JOYSTICK_Y_PIN)) / ANALOG_READ_MAX;
   this->delta_x_ = x_fraction * MAX_DELTA_X;
   if (delta_y_ > JUMP_THRESHOLD) {
     this->jump();
