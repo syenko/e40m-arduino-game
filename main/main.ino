@@ -5,8 +5,6 @@
 // your anode (+) wires and cathode (-) wires.
 const byte ANODE_PINS[8] = {13, 12, 11, 10, 9, 8, 7, 6 };
 const byte CATHODE_PINS[8] = { A3, A2, A1, A0, 5, 4, 3, 2 };
-const char JOYSTICK_X_PIN = A5;
-const char JOYSTICK_Y_PIN = A4;
 
 #define NUM_PINS 8
 
