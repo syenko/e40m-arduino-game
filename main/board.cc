@@ -1,4 +1,5 @@
 #include "board.hh"
+#include "math.h"
 
 #define GRAVITY 9.8
 #define BOARD_SIZE 8
@@ -27,10 +28,9 @@ Board::~Board() {
 }
 
 void Board::updateBoardState() {
-
   // apply gravity
   if (this->character->get_jumped()) {
-    this->character->set_delta_y(this->character->get_delta_y() - GRAVITY * TIME_CONST);
+    this->character->set_y_vel(this->character->get_delta_y() - GRAVITY * TIME_CONST);
   }
 
   // update based on velocities
@@ -38,6 +38,21 @@ void Board::updateBoardState() {
   float newY = this->character->get_y() + this->character->get_delta_y();
 
   // check collisions
+  // x is not blocked
+  if (this->get(round(newX), this->character->get_y_rounded()) == 0) {
+    this->character->set_x(newX);
+  }
+  // y is not blocked
+  if (this->get(this->character->get_x_rounded(), round(newY)) == 0) {
+    this->character->set_y(newY);
+
+    // has hit ground
+    if (this->character->get_jumped() && this->get(this->character->get_x_rounded(), round(newY) + 1)) {
+      this->character->set_jumped(false);
+      this->character->set_y_vel(0);
+    }
+  }
+ 
 
 }
 

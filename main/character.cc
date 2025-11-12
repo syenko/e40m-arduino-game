@@ -33,6 +33,14 @@ int Character::get_y_rounded() const {
   return round(this->get_y());
 }
 
+float Character::get_delta_x() const {
+  return this->delta_x_;
+}
+
+float Character::get_delta_y() const {
+  return this->delta_y_;
+}
+
 void Character::get_input() {
   float x_fraction = analogRead(JOYSTICK_X_PIN) / ANALOG_READ_MAX;
   float y_fraction = analogRead(JOYSTICK_Y_PIN) / ANALOG_READ_MAX;
@@ -61,18 +69,22 @@ void Character::jump() {
   }
 }
 
-void Character::update_x(float new_x) {
+void Character::set_x(float new_x) {
   this->x_pos_ = new_x;
 }`
 
-void Character::update_y(float new_y) {
+void Character::set_y(float new_y) {
   this->y_pos_ = new_y;
 }
 
-void Character::update_x_vel(float new_x_vel) {
+void Character::set_x_vel(float new_x_vel) {
   this->delta_x_ = new_x_vel;
 }
 
-void Character::update_y_vel(float new_y_vel) {
+void Character::set_y_vel(float new_y_vel) {
   this->delta_y_ = new_y_vel;
+}
+
+void Character::set_jumped(bool jumped) {
+  this->jumped_ = jumped;
 }
