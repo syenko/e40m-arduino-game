@@ -80,6 +80,14 @@ void Board::updateDisplay() {
       this->display[row][col] = this->get(row + x - (int)(BOARD_SIZE / 2), col + y - (int)(BOARD_SIZE / 2));
     }
   }
+
+  int start_x = BOARD_SIZE / 2;
+  int start_y = BOARD_SIZE / 2;
+  this->display[start_x][start_y] = 15;
+  this->display[start_x + 1][start_y] = 15;
+  this->display[start_x][start_y + ] = 15;
+  this->display[start_x + 1][start_y + 1] = 15;
+
 }
 
 char** Board::getDisplay() { 
