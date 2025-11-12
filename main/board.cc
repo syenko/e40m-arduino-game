@@ -2,6 +2,7 @@
 
 #define GRAVITY 9.8
 #define BOARD_SIZE 8
+#define TIME_CONST 0.01
 
 Board::Board() {
   this->character = new Character();
@@ -18,9 +19,25 @@ Board::Board() {
 
 Board::~Board() {
   delete this->character;
+
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    delete[] this->display[i];
+  }
+  delete[] this->display;
 }
 
 void Board::updateBoardState() {
+
+  // apply gravity
+  if (this->character->get_jumped()) {
+    this->character->set_delta_y(this->character->get_delta_y() - GRAVITY * TIME_CONST);
+  }
+
+  // update based on velocities
+  float newX = this->character->get_x() + this->character->get_delta_x();
+  float newY = this->character->get_y() + this->character->get_delta_y();
+
+  // check collisions
 
 }
 
