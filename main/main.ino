@@ -42,7 +42,7 @@ void display(char** pattern, byte cycle) {
   for (byte row = 0; row < NUM_PINS; row++) {
     char* row_arr = pattern[row];
     for (byte col = 0; col < NUM_PINS; col++) {
-      if (row_arr[col] > cycle) {
+      if (row_arr[col] > 0) {
         digitalWrite(CATHODE_PINS[col], LOW);
       }
       // turn off
