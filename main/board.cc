@@ -1,0 +1,49 @@
+#include "board.hh"
+
+#define GRAVITY 9.8
+#define BOARD_SIZE 8
+
+Board::Board() {
+  this->character = new Character();
+
+  // init display
+  this->display = new char*[BOARD_SIZE];
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    this->display[i] = new char[BOARD_SIZE];
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      this->display[i][j] = 0;
+    }
+  }
+}
+
+Board::~Board() {
+  delete this->character;
+}
+
+void Board::updateBoardState() {
+
+}
+
+char Board::get(int x, int y) {
+  if (x < 0 || x > this->boardHeight || y < 0 || y > this->boardHeight) {
+    return 0;
+  }
+  return board[x][y];
+}
+
+void Board::updateDisplay() {
+  int x = this->character->get_x_rounded();
+  int y = this->character->get_y_rounded();
+
+  for (int row = 0; row < BOARD_SIZE; row++) {
+    this->display[row] = new char[BOARD_SIZE];
+
+    for (int col = 0; col < BOARD_SIZE; col++) {
+      this->display[row][col] = this->get(row + x - (int)(BOARD_SIZE / 2), col + y - (int)(BOARD_SIZE / 2));
+    }
+  }
+}
+
+char** Board::getDisplay() { 
+  return this->display;
+}
