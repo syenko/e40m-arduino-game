@@ -85,7 +85,7 @@ void Board::updateDisplay() {
   int start_y = BOARD_SIZE / 2;
   this->display[start_x][start_y] = 15;
   this->display[start_x + 1][start_y] = 15;
-  this->display[start_x][start_y + ] = 15;
+  this->display[start_x][start_y + 1] = 15;
   this->display[start_x + 1][start_y + 1] = 15;
 
 }
