@@ -6,11 +6,16 @@ const char JOYSTICK_X_PIN = A5;
 const char JOYSTICK_Y_PIN = A4;
 const char MAX_DELTA_X = 2;
 const int ANALOG_READ_MAX = 1023;
-const float JUMP_THRESHOLD = 0.5;
-const char JUMP_VALUE = 2;
+const float JUMP_THRESHOLD = 0.2;
+const char JUMP_VALUE = -2;
 
 Character::Character() {
   this->lives_ = 4;
+  this->x_pos_ = 3;
+  this->y_pos_ = 3;
+  this->delta_x_ = 0;
+  this->delta_y_ = 0;
+  this->jumped_ = false;
 }
 
 Character::Character(char lives) {
@@ -42,10 +47,18 @@ float Character::get_delta_y() const {
 }
 
 void Character::get_input() {
-  float x_fraction = 1 - float(analogRead(JOYSTICK_X_PIN)) / ANALOG_READ_MAX;
-  float y_fraction = 1 - float(analogRead(JOYSTICK_Y_PIN)) / ANALOG_READ_MAX;
+  float x_fraction = 0.5 - float(analogRead(JOYSTICK_X_PIN)) / ANALOG_READ_MAX;
+  float y_fraction = 0.5 - float(analogRead(JOYSTICK_Y_PIN)) / ANALOG_READ_MAX;
+
+  if (abs(x_fraction) < 0.1) {
+    x_fraction = 0;
+  }
+  if (abs(y_fraction) < 0.1) {
+    y_fraction = 0;
+  }
+
   this->delta_x_ = x_fraction * MAX_DELTA_X;
-  if (delta_y_ > JUMP_THRESHOLD) {
+  if (y_fraction > JUMP_THRESHOLD) {
     this->jump();
   }
 }
@@ -63,9 +76,11 @@ bool Character::get_jumped() const {
 }
 
 void Character::jump() {
+  Serial.println("JUMPINGGGGG");
   if (!get_jumped()) {
     this->delta_y_ = JUMP_VALUE;
     this->jumped_ = true;
+      Serial.println("FRFRRRRR");
   }
 }
 

@@ -51,7 +51,7 @@ void display(char** pattern, byte cycle) {
     }
     // flash line
     digitalWrite(ANODE_PINS[row], LOW);
-    delayMicroseconds(10);
+    delayMicroseconds(50);
     digitalWrite(ANODE_PINS[row], HIGH);
   }
 }
@@ -65,6 +65,7 @@ void loop() {
 
   // This function gets called every loop
   board.updateDisplay();
+  board.updateBoardState();
   display(board.getDisplay(), cycle);
   cycle = (cycle + 1) % 16;
 }

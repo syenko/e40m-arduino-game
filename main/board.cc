@@ -1,12 +1,28 @@
 #include "board.hh"
 #include "math.h"
+#include "Arduino.h"
 
-#define GRAVITY 9.8
+#define GRAVITY 1
 #define BOARD_SIZE 8
 #define TIME_CONST 0.01
 
 Board::Board() {
   this->character = new Character();
+
+  // init board
+  this->boardHeight = BOARD_SIZE;
+  this->board = new char*[BOARD_SIZE];
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    this->board[i] = new char[BOARD_SIZE];
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      if (i > 4 && i < 7) {
+        this->board[i][j] = 16;
+      } else {
+        this->board[i][j] = 0;
+      }
+      
+    }
+  }
 
   // init display
   this->display = new char*[BOARD_SIZE];
@@ -35,13 +51,16 @@ Board::~Board() {
 void Board::updateBoardState() {
   this->character->get_input();
   // apply gravity
-  if (this->character->get_jumped()) {
-    this->character->set_y_vel(this->character->get_delta_y() - GRAVITY * TIME_CONST);
-  }
+  this->character->set_y_vel(this->character->get_delta_y() + GRAVITY * TIME_CONST);
+
+  // Serial.println("------");
+  // Serial.println(this->character->get_x());
+  // Serial.println(this->character->get_y());
+
 
   // update based on velocities
-  float newX = this->character->get_x() + this->character->get_delta_x();
-  float newY = this->character->get_y() + this->character->get_delta_y();
+  float newX = this->character->get_x() + this->character->get_delta_x() * TIME_CONST;
+  float newY = this->character->get_y() + this->character->get_delta_y() * TIME_CONST;
 
   // check collisions
   // x is not blocked
@@ -49,24 +68,21 @@ void Board::updateBoardState() {
     this->character->set_x(newX);
   }
   // y is not blocked
-  if (this->get(this->character->get_x_rounded(), round(newY)) == 0) {
+  if (this->get(this->character->get_x_rounded(), round(newY)) == 0 && this->get(this->character->get_x_rounded(), round(newY) + 1) == 0) {
     this->character->set_y(newY);
-
-    // has hit ground
-    if (this->character->get_jumped() && this->get(this->character->get_x_rounded(), round(newY) + 1)) {
-      this->character->set_jumped(false);
-      this->character->set_y_vel(0);
-    }
   }
- 
-
+  // has hit ground
+  if (this->get(this->character->get_x_rounded(), round(newY) + 2) && this->character->get_delta_y() > 0) {
+    this->character->set_jumped(false);
+    this->character->set_y_vel(0);
+  }
 }
 
 char Board::get(int x, int y) {
-  if (x < 0 || x > this->boardHeight || y < 0 || y > this->boardHeight) {
+  if (x < 0 || x >= this->boardHeight || y < 0 || y >= this->boardHeight) {
     return 0;
   }
-  return board[x][y];
+  return this->board[y][x];
 }
 
 void Board::updateDisplay() {
@@ -75,10 +91,8 @@ void Board::updateDisplay() {
   int y = this->character->get_y_rounded();
 
   for (int row = 0; row < BOARD_SIZE; row++) {
-    this->display[row] = new char[BOARD_SIZE];
-
     for (int col = 0; col < BOARD_SIZE; col++) {
-      this->display[row][col] = this->get(row + x - (int)((BOARD_SIZE - 1) / 2), col + y - (int)((BOARD_SIZE - 1) / 2));
+      this->display[row][col] = this->get(col + x - 3, row + y - 3);
     }
   }
 
