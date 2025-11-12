@@ -32,6 +32,7 @@ char Board::get(int x, int y) {
 }
 
 void Board::updateDisplay() {
+  this->character->get_input();
   int x = this->character->get_x_rounded();
   int y = this->character->get_y_rounded();
 

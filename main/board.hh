@@ -3,7 +3,7 @@
 class Board {
   public:
     Board();
-    ~Board() = default; 
+    ~Board();
     void updateBoardState();
     char** getDisplay();
   private:

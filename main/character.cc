@@ -63,7 +63,7 @@ void Character::jump() {
 
 void Character::update_x(float new_x) {
   this->x_pos_ = new_x;
-}
+}`
 
 void Character::update_y(float new_y) {
   this->y_pos_ = new_y;
