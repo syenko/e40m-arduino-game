@@ -64,6 +64,7 @@ void loop() {
   static byte cycle = 0;
 
   // This function gets called every loop
+  board.updateDisplay();
   display(board.getDisplay(), cycle);
   cycle = (cycle + 1) % 16;
 }

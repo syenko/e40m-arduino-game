@@ -13,7 +13,7 @@ Board::Board() {
   for (int i = 0; i < BOARD_SIZE; i++) {
     this->display[i] = new char[BOARD_SIZE];
     for (int j = 0; j < BOARD_SIZE; j++) {
-      if (i > 5) {
+      if (i > 4 && i < 7) {
         this->display[i][j] = 16;
       } else {
         this->display[i][j] = 0;
