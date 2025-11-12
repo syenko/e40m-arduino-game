@@ -6,10 +6,10 @@ class Board {
     ~Board();
     void updateBoardState();
     char** getDisplay();
+    void updateDisplay();
   private:
     Character* character;
     char get(int x, int y);
-    void updateDisplay();
 
     int boardWidth;
     int boardHeight;
