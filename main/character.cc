@@ -103,3 +103,12 @@ void Character::set_y_vel(float new_y_vel) {
 void Character::set_jumped(bool jumped) {
   this->jumped_ = jumped;
 }
+
+void Character::respawn() {
+  this->x_pos_ = 0;
+  this->y_pos_ = 0;
+  this->delta_x_ = 0;
+  this->delta_y_ = 0;
+  this->jumped_ = false;
+  this->decrease_life();
+}

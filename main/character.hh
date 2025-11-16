@@ -19,6 +19,7 @@ class Character {
     void set_x_vel(float new_x_vel);
     void set_y_vel(float new_y_vel);
     void set_jumped(bool jumped);
+    void respawn();
 
   private:
     float x_pos_;

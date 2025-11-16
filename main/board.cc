@@ -49,6 +49,8 @@ Board::~Board() {
 }
 
 void Board::updateBoardState() {
+  int const MINIMUM_Y = -5;
+
   this->character->get_input();
   // apply gravity
   this->character->set_y_vel(this->character->get_delta_y() + GRAVITY * TIME_CONST);
@@ -76,6 +78,15 @@ void Board::updateBoardState() {
     this->character->set_jumped(false);
     this->character->set_y_vel(0);
   }
+
+  if (this->character->get_y_rounded() < MINIMUM_Y) {
+    if (this->character->get_lives() > 0) {
+      this->character->respawn();
+    } else {
+      // TODO: Game over?
+    }
+  }
+
 }
 
 char Board::get(int x, int y) {
@@ -103,6 +114,11 @@ void Board::updateDisplay() {
   this->display[start_x + 1][start_y] = 15;
   this->display[start_x][start_y + 1] = 15;
   this->display[start_x + 1][start_y + 1] = 15;
+
+  // Draw lives
+  for (int i = 0; i < this->character->get_lives()) {
+    this->display[BOARD_SIZE - 1][i] = 15;
+  }
 
 }
 

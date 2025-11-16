@@ -6,7 +6,7 @@
 // Arrays of pin numbers. Fill these in with the pins to which you connected
 // your anode (+) wires and cathode (-) wires.
 const byte ANODE_PINS[8] = {13, 12, 11, 10, 9, 8, 7, 6 };
-const byte CATHODE_PINS[8] = { A3, A2, A1, A0, 5, 4, 3, 2 };
+const byte CATHODE_PINS[8] = {A3, A2, A1, A0, 5, 4, 3, 2 };
 
 #define NUM_PINS 8
 
