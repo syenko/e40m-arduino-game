@@ -10,6 +10,8 @@ class Board {
   private:
     Character* character;
     char get(int x, int y);
+    
+    bool isColliding(int x, int y); 
 
     int boardWidth;
     int boardHeight;

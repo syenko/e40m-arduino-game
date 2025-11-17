@@ -5,37 +5,52 @@
 #define GRAVITY 1
 #define BOARD_SIZE 8
 #define TIME_CONST 0.01
+#define MAX_LIVES 4
+#define CHARACTER_SIZE 2
 
 Board::Board() {
   this->character = new Character();
 
+  this->boardHeight = 15;
+  this->boardWidth = 15;
+  int t[this->boardHeight][this->boardWidth] = {
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,1,1,1,1,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,1,1,0},
+    {0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
+    {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,1,1,0,0,0,0,0,0,0,0,0,0},
+    {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+  };
+
   // init board
-  this->boardHeight = BOARD_SIZE;
-  this->board = new char*[BOARD_SIZE];
-  for (int i = 0; i < BOARD_SIZE; i++) {
-    this->board[i] = new char[BOARD_SIZE];
-    for (int j = 0; j < BOARD_SIZE; j++) {
-      if (i > 4 && i < 7) {
-        this->board[i][j] = 16;
-      } else {
-        this->board[i][j] = 0;
-      }
+  this->board = new char*[this->boardHeight];
+  for (int i = 0; i < this->boardHeight; i++) {
+    this->board[i] = new char[this->boardWidth];
+    for (int j = 0; j < this->boardWidth; j++) {
+      board[i][j] = t[i][j];
+      // if (i > 4 && i < 7) {
+      //   this->board[i][j] = 16;
+      // } else {
+      //   this->board[i][j] = 0;
+      // }
       
     }
   }
 
+
   // init display
   this->display = new char*[BOARD_SIZE];
   for (int i = 0; i < BOARD_SIZE; i++) {
-    this->display[i] = new char[BOARD_SIZE];
-    for (int j = 0; j < BOARD_SIZE; j++) {
-      if (i > 4 && i < 7) {
-        this->display[i][j] = 16;
-      } else {
-        this->display[i][j] = 0;
-      }
-      
-    }
+    this->display[i] = new char[BOARD_SIZE]; 
   }
 }
 
@@ -48,8 +63,19 @@ Board::~Board() {
   delete[] this->display;
 }
 
+bool Board::isColliding(int x, int y) {
+  for (int i = 0; i < CHARACTER_SIZE; i++) {
+    for (int j = 0; j < CHARACTER_SIZE; j++) {
+      if (this->get(x + i, y + j) != 0) {
+        return true;
+      } 
+    }
+  }
+  return false;
+}
+
 void Board::updateBoardState() {
-  int const MINIMUM_Y = -5;
+  int const MINIMUM_Y = 5;
 
   this->character->get_input();
   // apply gravity
@@ -66,20 +92,20 @@ void Board::updateBoardState() {
 
   // check collisions
   // x is not blocked
-  if (this->get(round(newX), this->character->get_y_rounded()) == 0) {
+  if (!isColliding(round(newX), this->character->get_y_rounded())) {
     this->character->set_x(newX);
   }
   // y is not blocked
-  if (this->get(this->character->get_x_rounded(), round(newY)) == 0 && this->get(this->character->get_x_rounded(), round(newY) + 1) == 0) {
+  if (!isColliding(this->character->get_x_rounded(), round(newY))) {
     this->character->set_y(newY);
   }
   // has hit ground
-  if (this->get(this->character->get_x_rounded(), round(newY) + 2) && this->character->get_delta_y() > 0) {
+  if (this->get(this->character->get_x_rounded(), this->character->get_y_rounded() + CHARACTER_SIZE) && this->character->get_delta_y() > 0) {
     this->character->set_jumped(false);
     this->character->set_y_vel(0);
   }
 
-  if (this->character->get_y_rounded() < MINIMUM_Y) {
+  if (this->character->get_y_rounded() > this->boardHeight + MINIMUM_Y) {
     if (this->character->get_lives() > 0) {
       this->character->respawn();
     } else {
@@ -116,8 +142,13 @@ void Board::updateDisplay() {
   this->display[start_x + 1][start_y + 1] = 15;
 
   // Draw lives
-  for (int i = 0; i < this->character->get_lives()) {
-    this->display[BOARD_SIZE - 1][i] = 15;
+  for (int i = 0; i < MAX_LIVES; i++) {
+    if (i < this->character->get_lives()) {
+      this->display[BOARD_SIZE - 1][i] = 15;
+    }
+    else {
+      this->display[BOARD_SIZE - 1][i] = 0;
+    }
   }
 
 }
