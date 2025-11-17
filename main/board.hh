@@ -7,6 +7,11 @@ const char CHUNK_COUNT = 5;
 const char CHARACTER_SIZE = 2;
 const char MAX_LIVES = 4;
 const char WIN_VAL = 2;
+const char START_THRESHOLD = 0.5;
+
+enum State {
+  playing, won, lost
+};
 
 class Board {
   public:
@@ -16,11 +21,12 @@ class Board {
     char** getDisplay();
     void updateDisplay();
     void generateChunk();
+
   private:
     Character* character;
     char get(int x, int y);
     
-    bool isColliding(int x, int y); 
+    int isColliding(int x, int y); 
     void generateFirstOrLastSection(const char size);
     void generateMiddleSection(const char size);
 
@@ -31,4 +37,5 @@ class Board {
     char** board;
     char** display;
     char** nextBoard;
+    State state;
 };
