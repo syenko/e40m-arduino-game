@@ -22,6 +22,7 @@ class Board {
     void generateMiddleSection(const char size);
 
     char** chunks[CHUNK_COUNT];
+    char chunkHeights[CHUNK_COUNT];
     int boardWidth;
     int boardHeight;
     char** board;
