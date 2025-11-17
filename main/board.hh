@@ -21,6 +21,7 @@ class Board {
 
 
     char** chunks[CHUNK_COUNT];
+    char chunkHeights[CHUNK_COUNT];
     int boardWidth;
     int boardHeight;
     char** board;
