@@ -2,12 +2,6 @@
 #include "math.h"
 #include "Arduino.h"
 
-#define GRAVITY 1
-#define BOARD_SIZE 8
-#define TIME_CONST 0.01
-#define MAX_LIVES 4
-#define CHARACTER_SIZE 2
-
 Board::Board() {
   this->character = new Character();
 
@@ -155,4 +149,33 @@ void Board::updateDisplay() {
 
 char** Board::getDisplay() { 
   return this->display;
+}
+
+
+void Board::generateFirstOrLastSection(const char size) {
+    // First or last section must be ground
+    for (int r = 0; r < BOARD_SIZE; r++) {
+        for (int c = 0; c < size; c++) {
+            
+        }
+    }
+}
+
+void Board::generateMiddleSection(const char size) {
+    
+}
+
+void generateChunk() {
+    char remaining_size = BOARD_SIZE;
+    char section_size = random(1, remaining_size - 1);
+    remaining_size -= section_size;
+    generateFirstOrLastSection(board, section_size);
+    section_size = random(1, remaining_size);
+    remaining_size -= section_size;
+    while (remaining_size > 0) {
+        generateSection(board, section_size);
+        section_size = random(1, remaining_size);
+        remaining_size -= section_size;
+    }
+    generateFirstOrLastSection(board, remaining_size);
 }
