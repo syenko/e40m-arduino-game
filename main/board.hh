@@ -4,6 +4,8 @@ const char GRAVITY = 1;
 const char BOARD_SIZE = 8;
 const float TIME_CONST = 0.01;
 const char CHUNK_COUNT = 5;
+const char CHARACTER_SIZE = 2;
+const char MAX_LIVES = 4;
 
 class Board {
   public:

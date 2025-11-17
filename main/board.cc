@@ -3,26 +3,27 @@
 #include "Arduino.h"
 
 Board::Board() {
-  this->character = new Character();
-
   this->boardHeight = 15;
   this->boardWidth = 15;
+
+  this->character = new Character(0, this->boardHeight-3);
+
   int t[this->boardHeight][this->boardWidth] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,4,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,1,1,1,1,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,1,1,0},
     {0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
-    {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+    {0,0,0,0,0,1,1,0,0,0,0,1,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
+    {0,0,0,0,0,0,0,0,0,0,1,0,0,1,0},
+    {0,0,0,0,0,0,0,0,0,1,1,0,0,0,0},
+    {0,0,0,0,0,0,1,1,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,1,1,0,0,0,0,0,0,0,0,0,0},
-    {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0}
   };
 
   // init board
@@ -73,12 +74,14 @@ void Board::updateBoardState() {
 
   this->character->get_input();
   // apply gravity
-  this->character->set_y_vel(this->character->get_delta_y() + GRAVITY * TIME_CONST);
+  if (this->character->get_jumped()) { 
+    this->character->set_y_vel(this->character->get_delta_y() + GRAVITY * TIME_CONST);
+  }
 
-  // Serial.println("------");
-  // Serial.println(this->character->get_x());
-  // Serial.println(this->character->get_y());
-
+  Serial.println("------");
+  Serial.println(this->character->get_x());
+  Serial.println(this->character->get_y());
+  Serial.println(this->character->get_jumped());
 
   // update based on velocities
   float newX = this->character->get_x() + this->character->get_delta_x() * TIME_CONST;
@@ -94,9 +97,14 @@ void Board::updateBoardState() {
     this->character->set_y(newY);
   }
   // has hit ground
-  if (this->get(this->character->get_x_rounded(), this->character->get_y_rounded() + CHARACTER_SIZE) && this->character->get_delta_y() > 0) {
-    this->character->set_jumped(false);
-    this->character->set_y_vel(0);
+  if (isColliding(this->character->get_x_rounded(), this->character->get_y_rounded() + 1)) {
+    if (this->character->get_delta_y() > 0) {
+      this->character->set_jumped(false);
+      this->character->set_y_vel(0);
+    }
+  }
+  else {
+    this->character->set_jumped(true);
   }
 
   if (this->character->get_y_rounded() > this->boardHeight + MINIMUM_Y) {
@@ -165,7 +173,7 @@ void Board::generateMiddleSection(const char size) {
     
 }
 
-void generateChunk() {
+void Board::generateChunk() {
     char remaining_size = BOARD_SIZE;
     char section_size = random(1, remaining_size - 1);
     remaining_size -= section_size;
