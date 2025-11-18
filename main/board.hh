@@ -4,6 +4,14 @@ const char GRAVITY = 1;
 const char BOARD_SIZE = 8;
 const float TIME_CONST = 0.01;
 const char CHUNK_COUNT = 5;
+const char CHARACTER_SIZE = 2;
+const char MAX_LIVES = 4;
+const char WIN_VAL = 2;
+const char START_THRESHOLD = 0.5;
+
+enum State {
+  playing, won, lost
+};
 
 class Board {
   public:
@@ -13,13 +21,12 @@ class Board {
     char** getDisplay();
     void updateDisplay();
     void generateChunk();
+
   private:
     Character* character;
     char get(int x, int y);
     
-    bool isColliding(int x, int y); 
-    int generateFirstOrLastSection(const char** chunk, const char size, const int prev_chunk_y, const int max_chunk_y);
-    int generateMiddleSection(const char** chunk, const char size, const int prev_chunk_y, const int max_chunk_y);
+    int isColliding(int x, int y); 
 
     char** chunks[CHUNK_COUNT];
     char chunkHeights[CHUNK_COUNT];
@@ -28,4 +35,5 @@ class Board {
     char** board;
     char** display;
     char** nextBoard;
+    State state;
 };

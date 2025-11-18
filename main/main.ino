@@ -9,6 +9,7 @@ const byte ANODE_PINS[8] = {13, 12, 11, 10, 9, 8, 7, 6 };
 const byte CATHODE_PINS[8] = {A3, A2, A1, A0, 5, 4, 3, 2 };
 
 #define NUM_PINS 8
+#define FLASH_SPEED 200
 
 Board board = Board();
 
@@ -38,7 +39,7 @@ void setup() {
  * one row at a time. When this function returns, all the LEDs will be off
  * again, so it needs to be called continuously for LEDs to be on.
  */
-void display(char** pattern, byte cycle) {
+void display(char** pattern, byte cycle, int big_cycle) {
   for (byte row = 0; row < NUM_PINS; row++) {
     for (byte col = 0; col < NUM_PINS; col++) {
       if (pattern[row][col] > 0) {
@@ -47,6 +48,15 @@ void display(char** pattern, byte cycle) {
       // turn off
       else {
         digitalWrite(CATHODE_PINS[col], HIGH);
+      }
+
+      if (pattern[row][col] == WIN_VAL) {
+        if (big_cycle % FLASH_SPEED < FLASH_SPEED / 2) {
+          digitalWrite(CATHODE_PINS[col], LOW);
+        }
+        else {
+          digitalWrite(CATHODE_PINS[col], HIGH);
+        }
       }
     }
     // flash line
@@ -62,10 +72,12 @@ void loop() {
   // use 'static' so that it retains its value between successive calls of loop()
   static byte ledOn[8][8];
   static byte cycle = 0;
+  static int big_cycle = 0;
 
   // This function gets called every loop
   board.updateDisplay();
   board.updateBoardState();
-  display(board.getDisplay(), cycle);
+  display(board.getDisplay(), cycle, big_cycle);
   cycle = (cycle + 1) % 16;
+  big_cycle += 1;
 }

@@ -9,10 +9,12 @@ const int ANALOG_READ_MAX = 1023;
 const float JUMP_THRESHOLD = 0.2;
 const char JUMP_VALUE = -2;
 
-Character::Character() {
+Character::Character(int x, int y) {
+  this->start_x_ = x;
+  this->start_y_ = y;
   this->lives_ = 4;
-  this->x_pos_ = 3;
-  this->y_pos_ = 3;
+  this->x_pos_ = x;
+  this->y_pos_ = y;
   this->delta_x_ = 0;
   this->delta_y_ = 0;
   this->jumped_ = false;
@@ -76,11 +78,9 @@ bool Character::get_jumped() const {
 }
 
 void Character::jump() {
-  Serial.println("JUMPINGGGGG");
   if (!get_jumped()) {
     this->delta_y_ = JUMP_VALUE;
     this->jumped_ = true;
-      Serial.println("FRFRRRRR");
   }
 }
 
@@ -105,8 +105,8 @@ void Character::set_jumped(bool jumped) {
 }
 
 void Character::respawn() {
-  this->x_pos_ = 0;
-  this->y_pos_ = 0;
+  this->x_pos_ = this->start_x_;
+  this->y_pos_ = this->start_y_;
   this->delta_x_ = 0;
   this->delta_y_ = 0;
   this->jumped_ = false;

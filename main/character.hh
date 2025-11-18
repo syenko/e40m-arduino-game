@@ -1,6 +1,7 @@
 class Character {
   public:
     Character();
+    Character(int x, int y);
     Character(char lives);
     ~Character() = default;
     float get_x() const;
@@ -24,6 +25,8 @@ class Character {
   private:
     float x_pos_;
     float y_pos_;
+    int start_x_;
+    int start_y_;
     float delta_x_;
     float delta_y_;
     char lives_;
