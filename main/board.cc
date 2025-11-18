@@ -2,6 +2,8 @@
 #include "math.h"
 #include "Arduino.h"
 
+// Pattern to display when the player wins.
+// It is a :) face
 const byte win[BOARD_SIZE][BOARD_SIZE] = {
   {0,0,0,0,0,0,0,0},
   {0,0,0,0,0,0,0,0},
@@ -13,6 +15,8 @@ const byte win[BOARD_SIZE][BOARD_SIZE] = {
   {0,0,0,0,0,0,0,0}
 };
 
+// Pattern to display when the player loses.
+// It is a :( face
 const byte lose[BOARD_SIZE][BOARD_SIZE] = {
   {0,0,0,0,0,0,0,0},
   {0,0,0,0,0,0,0,0},
@@ -24,6 +28,7 @@ const byte lose[BOARD_SIZE][BOARD_SIZE] = {
   {0,0,0,0,0,0,0,0}
 };
 
+// Initializes the character along with board and display buffers.
 Board::Board() {
   this->state = State::playing;
   this->boardHeight = 15;
@@ -31,6 +36,7 @@ Board::Board() {
 
   this->character = new Character(0, this->boardHeight-3);
 
+  // Level array
   int t[this->boardHeight][this->boardWidth] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,4,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -66,6 +72,7 @@ Board::Board() {
   }
 }
 
+// Cleans up allocated character and display buffers.
 Board::~Board() {
   delete this->character;
 
@@ -75,6 +82,7 @@ Board::~Board() {
   delete[] this->display;
 }
 
+// Checks for collisions between the character footprint and the board.
 int Board::isColliding(int x, int y) {
   int maxCollision = 0;
   for (int i = 0; i < CHARACTER_SIZE; i++) {
@@ -85,6 +93,7 @@ int Board::isColliding(int x, int y) {
   return maxCollision;
 }
 
+// Advances the game state by applying input, physics, and collisions.
 void Board::updateBoardState() {
   int const MINIMUM_Y = 5;
 
@@ -155,6 +164,7 @@ void Board::updateBoardState() {
 
 }
 
+// Returns the tile at the requested coordinate, or zero if out of bounds.
 char Board::get(int x, int y) {
   if (x < 0 || x >= this->boardHeight || y < 0 || y >= this->boardHeight) {
     return 0;
@@ -162,6 +172,7 @@ char Board::get(int x, int y) {
   return this->board[y][x];
 }
 
+// Rebuilds the visible window centered on the character.
 void Board::updateDisplay() {
   switch (this->state) {
     case State::playing: {
@@ -214,38 +225,11 @@ void Board::updateDisplay() {
 
 }
 
+// Provides access to the current display buffer.
 char** Board::getDisplay() { 
   return this->display;
 }
 
 void Board::reset() {
   this->character->respawn(false);
-}
-
-void Board::generateFirstOrLastSection(const char size) {
-    // First or last section must be ground
-    for (int r = 0; r < BOARD_SIZE; r++) {
-        for (int c = 0; c < size; c++) {
-            
-        }
-    }
-}
-
-void Board::generateMiddleSection(const char size) {
-    
-}
-
-void Board::generateChunk() {
-    char remaining_size = BOARD_SIZE;
-    char section_size = random(1, remaining_size - 1);
-    remaining_size -= section_size;
-    generateFirstOrLastSection(board, section_size);
-    section_size = random(1, remaining_size);
-    remaining_size -= section_size;
-    while (remaining_size > 0) {
-        generateSection(board, section_size);
-        section_size = random(1, remaining_size);
-        remaining_size -= section_size;
-    }
-    generateFirstOrLastSection(board, remaining_size);
 }
