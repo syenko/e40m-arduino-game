@@ -1,6 +1,13 @@
 class Character {
   public:
+    /**
+     * This function creates the Character object at (0,0)
+     */
     Character();
+
+    /**
+     * This function creates a character Character at (x, y).
+     */
     Character(int x, int y);
     Character(char lives);
     ~Character() = default;

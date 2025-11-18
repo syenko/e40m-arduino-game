@@ -9,6 +9,8 @@ const int ANALOG_READ_MAX = 1023;
 const float JUMP_THRESHOLD = 0.2;
 const char JUMP_VALUE = -2;
 
+Character::Character() : Character(0, 0) {}
+
 Character::Character(int x, int y) {
   this->start_x_ = x;
   this->start_y_ = y;
