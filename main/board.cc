@@ -34,9 +34,10 @@ Board::Board() {
   this->boardHeight = 25;
   this->boardWidth = 20;
 
-  this->character = new Character(0, this->boardHeight-3);
+  this->character = new Character(0, this->boardHeight- CHARACTER_SIZE - 1);
+  
   // Level array
-  const char t[this->boardHeight][this->boardWidth] = {
+  const char level_array[this->boardHeight][this->boardWidth] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,WIN_VAL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -64,13 +65,12 @@ Board::Board() {
     {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
   };
 
-
   // init board
   this->board = new char*[this->boardHeight];
   for (int i = 0; i < this->boardHeight; i++) {
     this->board[i] = new char[this->boardWidth];
     for (int j = 0; j < this->boardWidth; j++) {
-      board[i][j] = t[i][j];
+      board[i][j] = level_array[i][j];
     }
   }
 
