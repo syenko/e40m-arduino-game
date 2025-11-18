@@ -10,6 +10,7 @@ const byte CATHODE_PINS[8] = {A3, A2, A1, A0, 5, 4, 3, 2 };
 
 #define NUM_PINS 8
 #define FLASH_SPEED 200
+#define REFRESH_DELAY 50
 
 Board board = Board();
 
@@ -40,7 +41,7 @@ void setup() {
  * one row at a time. When this function returns, all the LEDs will be off
  * again, so it needs to be called continuously for LEDs to be on.
  */
-void display(char** pattern, byte cycle, int big_cycle) {
+void display(char** pattern, int big_cycle) {
   for (byte row = 0; row < NUM_PINS; row++) {
     for (byte col = 0; col < NUM_PINS; col++) {
       if (pattern[row][col] > 0) {
@@ -62,7 +63,7 @@ void display(char** pattern, byte cycle, int big_cycle) {
     }
     // flash line
     digitalWrite(ANODE_PINS[row], LOW);
-    delayMicroseconds(50);
+    delayMicroseconds(REFRESH_DELAY);
     digitalWrite(ANODE_PINS[row], HIGH);
   }
 }
@@ -70,14 +71,13 @@ void display(char** pattern, byte cycle, int big_cycle) {
 // Runs the main game loop: update state, refresh display, and multiplex LEDs.
 void loop() {
   // use 'static' so that it retains its value between successive calls of loop()
-  static byte ledOn[8][8];
+  static byte ledOn[NUM_PINS][NUM_PINS];
   static byte cycle = 0;
   static int big_cycle = 0;
 
   // This function gets called every loop
   board.updateDisplay();
   board.updateBoardState();
-  display(board.getDisplay(), cycle, big_cycle);
-  cycle = (cycle + 1) % 16;
+  display(board.getDisplay(), big_cycle);
   big_cycle = (big_cycle + 1) % FLASH_SPEED;
 }

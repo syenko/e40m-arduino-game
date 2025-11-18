@@ -126,7 +126,7 @@ void Character::set_jumped(bool jumped) {
   this->jumped_ = jumped;
 }
 
-// Resets state to the spawn position and decreases a life.
+// Resets state to the spawn position and decreases a life (if specified)
 void Character::respawn(bool decrease) {
   this->x_pos_ = this->start_x_;
   this->y_pos_ = this->start_y_;
@@ -142,6 +142,7 @@ void Character::respawn(bool decrease) {
   }
 }
 
+// Gets input to see if user should respawn
 bool Character::get_respawn_input() const {
   float y_fraction = 0.5 - float(analogRead(JOYSTICK_Y_PIN)) / ANALOG_READ_MAX;
 

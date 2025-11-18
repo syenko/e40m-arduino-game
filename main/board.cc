@@ -74,7 +74,6 @@ Board::Board() {
     }
   }
 
-
   // init display
   this->display = new char*[BOARD_SIZE];
   for (int i = 0; i < BOARD_SIZE; i++) {
@@ -147,6 +146,7 @@ void Board::updateBoardState() {
         this->character->set_jumped(true);
       }
 
+      // fell off screen
       if (this->character->get_y_rounded() > this->boardHeight + MINIMUM_Y) {
         if (this->character->get_lives() > 1) {
           this->character->respawn(true);
@@ -194,15 +194,15 @@ void Board::updateDisplay() {
       // draw character
       int start_x = (BOARD_SIZE - 1) / 2;
       int start_y = (BOARD_SIZE - 1) / 2;
-      this->display[start_x][start_y] = 15;
-      this->display[start_x + 1][start_y] = 15;
-      this->display[start_x][start_y + 1] = 15;
-      this->display[start_x + 1][start_y + 1] = 15;
+      this->display[start_x][start_y] = MAX_BRIGHTNESS;
+      this->display[start_x + 1][start_y] = MAX_BRIGHTNESS;
+      this->display[start_x][start_y + 1] = MAX_BRIGHTNESS;
+      this->display[start_x + 1][start_y + 1] = MAX_BRIGHTNESS;
 
       // Draw lives
       for (int i = 0; i < MAX_LIVES; i++) {
         if (i < this->character->get_lives()) {
-          this->display[BOARD_SIZE - 1][i] = 15;
+          this->display[BOARD_SIZE - 1][i] = MAX_BRIGHTNESS;
         }
         else {
           this->display[BOARD_SIZE - 1][i] = 0;
@@ -235,6 +235,7 @@ char** Board::getDisplay() {
   return this->display;
 }
 
+// Reset the character to starting position and lives
 void Board::reset() {
   this->character->respawn(false);
 }
