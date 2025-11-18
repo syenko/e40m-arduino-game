@@ -6,6 +6,7 @@
 // They are commented out so that the code compiles and can be added to the
 // arduino.
 
+// Generates the first or last section in a chunk.
 // int Chunk::generateFirstOrLastSection(const char** chunk, const char size, const int prev_chunk_y, const int max_chunk_y) {
 //     // First or last section must be ground
 //     const int min_chunk_y = max_chunk_y - BOARD_SIZE;
@@ -21,10 +22,12 @@
 //     }
 // }
 
+// Creates a middle section in a chunk.
 // int Chunk::generateMiddleSection(const char** chunk, const char size, const int prev_chunk_y, const int max_chunk_y) {
     
 // }
 
+// Creates the first chunk of a level.
 // void Chunk() {
 //     char remaining_size = BOARD_SIZE;
 //     char section_size = random(MIN_SECTION_SIZE, remaining_size - 1);

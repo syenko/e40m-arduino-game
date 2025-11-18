@@ -13,6 +13,7 @@ const byte CATHODE_PINS[8] = {A3, A2, A1, A0, 5, 4, 3, 2 };
 
 Board board = Board();
 
+// Configures hardware IO and serial before the game starts.
 void setup() {
   for (byte i = 0; i < NUM_PINS; i++) {
     // configure pins to be outputs
@@ -66,6 +67,7 @@ void display(char** pattern, byte cycle, int big_cycle) {
   }
 }
 
+// Runs the main game loop: update state, refresh display, and multiplex LEDs.
 void loop() {
   // You shouldn't need to edit this function during lab 3a.
 

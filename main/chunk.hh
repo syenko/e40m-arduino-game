@@ -11,11 +11,18 @@
 
 // class Chunk {
 //     public:
+//         // Creates the first chunk.
 //         Chunk();
+
+//         // Creates a new chunk to connect with the previous chunk.
 //         Chunk(Chunk* prev);
 
 //     private:
+
+//         // Creates the first or last section in a chunk.
 //         int generateFirstOrLastSection();
+
+//         // Creates middle sections of a chunk
 //         int generateMiddleSection();
 
 

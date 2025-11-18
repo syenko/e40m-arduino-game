@@ -15,17 +15,25 @@ enum State {
 
 class Board {
   public:
+    // Creates the board, initializes tiles, display buffers, and character.
     Board();
+    // Releases heap-allocated character and display memory.
     ~Board();
+    // Advances physics and transitions game state based on input/collisions.
     void updateBoardState();
+    // Returns the 8x8 display buffer for LED driving.
     char** getDisplay();
+    // Rebuilds what should be shown based on the character and state.
     void updateDisplay();
+    // Future hook for generating procedural chunk data.
     void generateChunk();
 
   private:
     Character* character;
+    // Safely reads the board at (x, y), or zero when out of bounds.
     char get(int x, int y);
     
+    // Returns the highest collision value within the character footprint.
     int isColliding(int x, int y); 
 
     char** chunks[CHUNK_COUNT];
