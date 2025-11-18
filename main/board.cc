@@ -112,15 +112,18 @@ void Board::updateBoardState() {
 
       // check collisions
       // x is not blocked
-      if (isColliding(round(newX), this->character->get_y_rounded()) == 0) {
+      int x_collision = isColliding(round(newX), this->character->get_y_rounded());
+      if (x_collision == 0 || x_collision == WIN_VAL) {
         this->character->set_x(newX);
       }
       // y is not blocked
-      if (isColliding(this->character->get_x_rounded(), round(newY)) == 0) {
+      int y_collision = isColliding(this->character->get_x_rounded(), round(newY));
+      if (y_collision == 0 || y_collision == WIN_VAL) {
         this->character->set_y(newY);
       }
       // has hit ground
-      if (isColliding(this->character->get_x_rounded(), this->character->get_y_rounded() + 1) != 0) {
+      int ground_collision = isColliding(this->character->get_x_rounded(), this->character->get_y_rounded() + 1);
+      if (!(ground_collision == 0 || ground_collision == WIN_VAL)) {
         if (this->character->get_delta_y() > 0) {
           this->character->set_jumped(false);
           this->character->set_y_vel(0);
@@ -131,8 +134,8 @@ void Board::updateBoardState() {
       }
 
       if (this->character->get_y_rounded() > this->boardHeight + MINIMUM_Y) {
-        if (this->character->get_lives() > 0) {
-          this->character->respawn();
+        if (this->character->get_lives() > 1) {
+          this->character->respawn(true);
         } else {
           this->state = State::lost;
         }
@@ -141,10 +144,10 @@ void Board::updateBoardState() {
     }
     case State::won:
     case State::lost: {
-      this->character->get_input();
       // move character to start
-      if (abs(this->character->get_delta_x()) > START_THRESHOLD || abs(this->character->get_delta_y()) > START_THRESHOLD) {
+      if (this->character->get_respawn_input()) {
         this->state = State::playing;
+        this->reset();
       }
       break; 
     }
@@ -215,6 +218,9 @@ char** Board::getDisplay() {
   return this->display;
 }
 
+void Board::reset() {
+  this->character->respawn(false);
+}
 
 void Board::generateFirstOrLastSection(const char size) {
     // First or last section must be ground

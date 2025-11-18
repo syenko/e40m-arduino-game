@@ -1,3 +1,5 @@
+const char MAX_LIVES = 4;
+
 class Character {
   public:
     Character();
@@ -11,6 +13,7 @@ class Character {
     int get_y_rounded() const;
     float get_delta_x() const;
     float get_delta_y() const;
+    bool get_respawn_input() const;
     void get_input();
     void decrease_life();
     char get_lives() const;
@@ -20,7 +23,7 @@ class Character {
     void set_x_vel(float new_x_vel);
     void set_y_vel(float new_y_vel);
     void set_jumped(bool jumped);
-    void respawn();
+    void respawn(bool decrease);
 
   private:
     float x_pos_;

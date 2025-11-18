@@ -8,6 +8,7 @@ const char MAX_DELTA_X = 2;
 const int ANALOG_READ_MAX = 1023;
 const float JUMP_THRESHOLD = 0.2;
 const char JUMP_VALUE = -2;
+const float START_THRESHOLD = -0.45;
 
 Character::Character(int x, int y) {
   this->start_x_ = x;
@@ -104,11 +105,23 @@ void Character::set_jumped(bool jumped) {
   this->jumped_ = jumped;
 }
 
-void Character::respawn() {
+void Character::respawn(bool decrease) {
   this->x_pos_ = this->start_x_;
   this->y_pos_ = this->start_y_;
   this->delta_x_ = 0;
   this->delta_y_ = 0;
   this->jumped_ = false;
-  this->decrease_life();
+
+  if (decrease) {
+    this->decrease_life();
+  }
+  else {
+    this->lives_ = MAX_LIVES;
+  }
+}
+
+bool Character::get_respawn_input() const {
+  float y_fraction = 0.5 - float(analogRead(JOYSTICK_Y_PIN)) / ANALOG_READ_MAX;
+
+  return y_fraction <= START_THRESHOLD;
 }

@@ -5,9 +5,7 @@ const char BOARD_SIZE = 8;
 const float TIME_CONST = 0.01;
 const char CHUNK_COUNT = 5;
 const char CHARACTER_SIZE = 2;
-const char MAX_LIVES = 4;
 const char WIN_VAL = 2;
-const char START_THRESHOLD = 0.5;
 
 enum State {
   playing, won, lost
@@ -25,6 +23,7 @@ class Board {
   private:
     Character* character;
     char get(int x, int y);
+    void reset();
     
     int isColliding(int x, int y); 
     void generateFirstOrLastSection(const char size);
