@@ -52,7 +52,7 @@ void display(char** pattern, byte cycle, int big_cycle) {
       }
 
       if (pattern[row][col] == WIN_VAL) {
-        if (big_cycle % FLASH_SPEED < FLASH_SPEED / 2) {
+        if (big_cycle < FLASH_SPEED / 2) {
           digitalWrite(CATHODE_PINS[col], LOW);
         }
         else {
@@ -69,8 +69,6 @@ void display(char** pattern, byte cycle, int big_cycle) {
 
 // Runs the main game loop: update state, refresh display, and multiplex LEDs.
 void loop() {
-  // You shouldn't need to edit this function during lab 3a.
-
   // use 'static' so that it retains its value between successive calls of loop()
   static byte ledOn[8][8];
   static byte cycle = 0;
@@ -81,5 +79,5 @@ void loop() {
   board.updateBoardState();
   display(board.getDisplay(), cycle, big_cycle);
   cycle = (cycle + 1) % 16;
-  big_cycle += 1;
+  big_cycle = (big_cycle + 1) % FLASH_SPEED;
 }
